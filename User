@@ -1,0 +1,43 @@
+package date201709.date20170915;
+
+import java.io.Serializable;
+
+public class User implements Serializable, Comparable<User> {
+
+    private static final long serialVersionUID = 1L;
+
+    private Integer id;
+
+    private Integer age;
+
+    private String name;
+
+    public User(Integer id, Integer age, String name) {
+        super();
+        this.id = id;
+        this.age = age;
+        this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", age=" + age + ", name=" + name + "]";
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return this.getId().compareTo(o.getId());
+    }
+}
