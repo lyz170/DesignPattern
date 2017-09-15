@@ -1,0 +1,58 @@
+package date201709.date20170915;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class UserTest {
+
+    private final static List<User> userList = initUserList();
+
+    @SuppressWarnings("serial")
+    private static List<User> initUserList() {
+        return new ArrayList<User>() {
+            {
+                add(new User(5, 31, "Zhang San"));
+                add(new User(2, 28, "Li Si"));
+                add(new User(3, 26, "Wang Wu"));
+                add(new User(1, 23, "Zhao Liu"));
+                add(new User(4, 26, "Liu Qi"));
+            }
+        };
+    }
+
+    private static void print() {
+        userList.forEach(elem -> {
+            System.out.println(elem.toString());
+        });
+    }
+
+    public static void main(String[] args) {
+        // (1)
+        // Collections.sort(userList);
+        // print();
+        // (2)
+        // Collections.sort(userList, new AgeComparator());
+        // print();
+        // (3)
+        // Collections.sort(userList, new Comparator<User>() {
+        // @Override
+        // public int compare(User o1, User o2) {
+        // return o1.getAge().compareTo(o2.getAge());
+        // }
+        // });
+        // print();
+        // (4)
+        // Collections.sort(userList, (User a, User b) -> (a.getAge().compareTo(b.getAge())));
+        // print();
+    }
+
+    static class AgeComparator implements Comparator<User> {
+        @Override
+        public int compare(User o1, User o2) {
+            return o1.getAge().compareTo(o2.getAge());
+        }
+    }
+}
