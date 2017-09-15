@@ -1,0 +1,164 @@
+package date201709.date20170915;
+
+public class SortUtil {
+
+    private static int quickSortTimes = 1;
+
+    /**
+     * 冒泡排序:<br>
+     * 两层循环，每次循环比较前后两个元素，如果他们的顺序错误就把他们交换过来，一次循环后最终会把最大的数沉到数列的末端<br>
+     * 下次循环时,上次循环沉到数列的末端的数不用再参与到本次循环中来比较<br>
+     */
+    public static void bubbleSort(int[] nums) {
+        int temp = 0;
+        int size = nums.length;
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (nums[j] > nums[j + 1]) {
+                    temp = nums[j];
+                    nums[j] = nums[j + 1];
+                    nums[j + 1] = temp;
+                }
+            }
+            printLog(nums, i + 1);
+        }
+    }
+
+    /**
+     * 选择排序:<br>
+     * 在要排序的一组数中，选出最小的一个数与第一个位置的数交换；然后在剩下的数当中再找最小的与第二个位置的数交换，如此循环<br>
+     */
+    public static void selectSort(int[] nums) {
+        int temp = 0;
+        int size = nums.length;
+        for (int i = 0; i < size - 1; i++) {
+            // 记录每一次循环最小值的位置
+            int pos = i;
+            for (int j = i + 1; j < size; j++) {
+                if (nums[pos] > nums[j]) {
+                    pos = j;
+                }
+            }
+            // 最小的数与第i个位置的数交换
+            temp = nums[i];
+            nums[i] = nums[pos];
+            nums[pos] = temp;
+
+            printLog(nums, i + 1);
+        }
+    }
+
+    /**
+     * 插入排序<br>
+     * 每步将一个待排序的记录，按其大小插入到前面已经排序的字序列的合适位置（从后向前找到合适位置后），直到全部插入排序完为止。<br>
+     */
+    private static void insertSort(int[] nums) {
+        int temp = 0;
+        int size = nums.length;
+        // 从第2个元素开始，第1个元素可以认为已经被排序
+        for (int i = 1; i < size; i++) {
+            // 取出下一个元素
+            temp = nums[i];
+            // 在已经排序的元素序列中从前向后扫描
+            for (int j = 0; j < i; j++) {
+                // 假如temp比前面的某个值小，则将这个值及之后的值后移
+                if (temp < nums[j]) {
+                    for (int k = i; k > j; k--) {
+                        nums[k] = nums[k - 1];
+                    }
+                    nums[j] = temp;
+                    break;
+                }
+            }
+
+            printLog(nums, i);
+        }
+    }
+
+    /**
+     * 快速排序:<br>
+     * 选取当前数组段的第一个数作为中轴，和最后一个比，如果比它小交换，比它大(或相等)不做任何处理<br>
+     * 交换了以后再和小的那端比，比它小不交换，比他大交换<br>
+     * 这样循环往复，一趟排序完成，左边就是比中轴小的，右边就是比中轴大的，然后再递归对左边和右边的数组排序<br>
+     */
+    public static void quickSort(int[] numbers) {
+        if (numbers.length > 1) {
+            quickSort(numbers, 0, numbers.length - 1);
+        }
+    }
+
+    private static void quickSort(int[] nums, int low, int high) {
+        if (low < high) {
+            // 选取中轴
+            int middle = getMiddle(nums, low, high);
+            printQuickSortLog(nums, low, high);
+            if (low < middle - 1) {
+                // 对低字段表进行递归排序
+                quickSort(nums, low, middle - 1);
+            }
+            if (middle + 1 < high) {
+                // 对高字段表进行递归排序
+                quickSort(nums, middle + 1, high);
+            }
+        }
+    }
+
+    private static int getMiddle(int[] nums, int low, int high) {
+        // 选取当前数组段的第一个数作为中轴
+        int temp = nums[low];
+        while (low < high) {
+            // 比中轴大(或相等)不做任何处理(high--)，直到找到比中轴小的
+            while (low < high && nums[high] >= temp) {
+                high--;
+            }
+            // 比中轴小的记录移到低端
+            nums[low] = nums[high];
+            // 比中轴小不做任何处理(low++)，直到找到比中轴大(或相等)的
+            while (low < high && nums[low] < temp) {
+                low++;
+            }
+            // 比中轴大(或相等)的记录移到高端
+            nums[high] = nums[low];
+        }
+        // 中轴记录到尾
+        nums[low] = temp;
+        // 返回中轴的位置
+        return low;
+    }
+
+    private static void printLog(int[] nums, int times) {
+        System.out.println("第" + times + "次排序结果:\t" + formatNums(nums));
+    }
+
+    private static void printQuickSortLog(int[] nums, int low, int high) {
+        System.out.println("第" + quickSortTimes++ + "次排序结果:\t" + formatNums(nums, low, high));
+    }
+
+    private static String formatNums(int[] nums) {
+        return formatNums(nums, 0, nums.length - 1);
+    }
+
+    private static String formatNums(int[] nums, int low, int high) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < low; i++) {
+            sb.append("-- ");
+        }
+        for (int i = low; i <= high; i++) {
+            sb.append(nums[i]).append(" ");
+        }
+        for (int i = high + 1; i < nums.length; i++) {
+            sb.append("-- ");
+        }
+        return sb.toString().trim();
+    }
+
+    public static void main(String[] args) {
+
+        // 10, 12, 15, 27, 30, 46, 59, 59, 83, 91
+        int[] nums = { 30, 83, 59, 12, 46, 15, 91, 10, 59, 27 };
+        // bubbleSort(nums);
+        // selectSort(nums);
+        // quickSort(nums);
+        // insertSort(nums);
+    }
+}
